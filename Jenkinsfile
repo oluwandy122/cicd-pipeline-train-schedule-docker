@@ -22,5 +22,18 @@ pipeline {
                 }
             }
         }
+        
+        stage('Push image to registry') {
+            when {
+                branch 'master'
+            }
+            step {
+                script {
+                   docker.withRegistry('registry.hub.docker.com', 'docker_hub_login')
+                   docker.push("${env.BUILD_NUMBER}")
+                   docker.push("latest") 
+                }
+            }
+        }
     }
 }
